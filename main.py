@@ -34,7 +34,13 @@ app.include_router(reports.router,       prefix="/api")
 app.include_router(notifications.router, prefix="/api")
 app.include_router(admin.router,         prefix="/api")
 
-
+@app.get("/debug/uploads")
+def debug_uploads():
+    import os
+    return {
+        "files": os.listdir(settings.UPLOAD_DIR),
+        "path": settings.UPLOAD_DIR
+    }
 @app.get("/", tags=["Health"])
 def health():
     return {"status": "ok", "app": "Balligh+ API", "version": "1.0.0"}
