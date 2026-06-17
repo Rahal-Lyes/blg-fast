@@ -1,12 +1,9 @@
 from pydantic_settings import BaseSettings
 from typing import List
-import json
-
 
 class Settings(BaseSettings):
     # Database
-    # DATABASE_URL: str = "postgresql://app_user:app_password@localhost:5432/app_db"
-    DATABASE_URL="postgresql://baligh_user:W0k2zVg4NoOQc81IPtJLPZN0Za3N2tWE@dpg-d8p51677fcjvv50-a:5432/baligh_db"
+    DATABASE_URL: str = "postgresql://baligh_user:W0k2zVg4NoOQc81IPtJLPZN0Za3N2tWE@dpg-d8p51677f7vs73cjvv50-a.oregon-postgres.render.com/baligh_db"
 
     # JWT
     SECRET_KEY: str = "change_this_to_a_long_random_secret_key_in_production"
@@ -22,11 +19,15 @@ class Settings(BaseSettings):
 
     # App
     APP_ENV: str = "development"
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173", "http://localhost:8080","https://blg-fast.onrender.com"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:8080",
+        "https://blg-fast.onrender.com"
+    ]
 
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
-
 
 settings = Settings()
