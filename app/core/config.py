@@ -5,7 +5,8 @@ import json
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "postgresql://app_user:app_password@localhost:5432/app_db"
+    # DATABASE_URL: str = "postgresql://app_user:app_password@localhost:5432/app_db"
+    DATABASE_URL="postgresql://baligh_user:W0k2zVg4NoOQc81IPtJLPZN0Za3N2tWE@dpg-d8p51677fcjvv50-a:5432/baligh_db"
 
     # JWT
     SECRET_KEY: str = "change_this_to_a_long_random_secret_key_in_production"
