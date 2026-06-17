@@ -5,24 +5,42 @@ services:
     build: .
     container_name: balligh_api
     restart: always
-
     ports:
       - "8000:8000"
-
     environment:
-      DATABASE_URL: "postgresql://baligh_user:wWXv80X2lG2ZGMnvkK8LF25wfVr0SwJh@dpg-d8p51677f7vs73cjvv50-a.oregon-postgres.render.com:5432/baligh_db_ange?sslmode=require"
-      SECRET_KEY: "supersecret"
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
       UPLOAD_DIR: "uploads"
-
     volumes:
       - .:/app
       - uploads_data:/app/uploads
-
+    depends_on:
+      db:
+        condition: service_healthy
     command: >
       sh -c "
       alembic upgrade head &&
-      uvicorn app.main:app --host 0.0.0.0 --port 8000
+      uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
       "
+
+  db:
+    image: postgres:15
+    container_name: balligh_db
+    restart: always
+    environment:
+      POSTGRES_USER: baligh_user
+      POSTGRES_PASSWORD: baligh_pass
+      POSTGRES_DB: baligh_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U baligh_user -d baligh_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   uploads_data:
+  postgres_data:
