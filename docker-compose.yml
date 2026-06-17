@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres:15
+    container_name: balligh_db
+    restart: always
+    environment:
+      POSTGRES_USER: balligh
+      POSTGRES_PASSWORD: balligh123
+      POSTGRES_DB: balligh_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: balligh_api
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://balligh:balligh123@db:5432/balligh_db
+      SECRET_KEY: "supersecret"
+      UPLOAD_DIR: uploads
+
+    volumes:
+      - .:/app
+      - uploads_data:/app/uploads
+
+volumes:
+  postgres_data:
+  uploads_data:
