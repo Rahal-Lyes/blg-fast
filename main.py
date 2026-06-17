@@ -5,11 +5,10 @@ from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.api.routes import auth, users, reports, notifications, admin
-from app.db.session import engine  # adapte selon ton projet
 
 app = FastAPI(
     title="Balligh+ API",
-    description="Backend API for the Smart Neighborhood Issue Reporting Platform",
+    description="Backend API for the Smart Neighborhood Issue Reporting Platform — منصة الإبلاغ الذكي عن مشاكل الأحياء",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -24,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Static files ──────────────────────────────────────────────────
+# ── Static files (uploaded images) ───────────────────────────────
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 
@@ -35,23 +34,13 @@ app.include_router(reports.router,       prefix="/api")
 app.include_router(notifications.router, prefix="/api")
 app.include_router(admin.router,         prefix="/api")
 
-# ── Health & Debug ────────────────────────────────────────────────
-@app.get("/", tags=["Health"])
-def health():
-    return {"status": "ok", "app": "Balligh+ API", "version": "1.0.0"}
-
-@app.get("/debug/uploads", tags=["Debug"])
+@app.get("/debug/uploads")
 def debug_uploads():
+    import os
     return {
         "files": os.listdir(settings.UPLOAD_DIR),
         "path": settings.UPLOAD_DIR
     }
-
-@app.get("/debug/db", tags=["Debug"])
-def debug_db():
-    try:
-        with engine.connect() as conn:
-            conn.execute("SELECT 1")
-        return {"status": "✅ DB connectée"}
-    except Exception as e:
-        return {"status": "❌ Erreur DB", "detail": str(e)}
+@app.get("/", tags=["Health"])
+def health():
+    return {"status": "ok", "app": "Balligh+ API", "version": "1.0.0"}
