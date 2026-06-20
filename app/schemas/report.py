@@ -103,6 +103,8 @@ class ReportListOut(BaseModel):
     commune: str
     status: str
     priority: str
+    lat: Optional[float] = None      # ← AJOUTÉ
+    lng: Optional[float] = None      # ← AJOUTÉ
     votes_count: int
     created_at: datetime
     author_name: Optional[str] = None
