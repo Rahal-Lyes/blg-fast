@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
-from app.api.routes import auth, users, reports, notifications, admin
+from app.api.routes import auth, users, reports, notifications, admin,stats
 
 app = FastAPI(
     title="Balligh+ API",
@@ -33,6 +33,7 @@ app.include_router(users.router,         prefix="/api")
 app.include_router(reports.router,       prefix="/api")
 app.include_router(notifications.router, prefix="/api")
 app.include_router(admin.router,         prefix="/api")
+app.include_router(stats.router, prefix="/api")
 
 @app.get("/debug/uploads")
 def debug_uploads():
