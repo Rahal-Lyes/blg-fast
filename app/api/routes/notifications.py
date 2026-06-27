@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -7,7 +7,7 @@ from app.schemas.notification import NotificationOut
 from app.models.user import User
 from app.core.security import require_auth, require_admin
 from app.services import notification_service
-
+from fastapi import HTTPException
 router = APIRouter(prefix="/notifications", tags=["Notifications"])
 
 
@@ -29,7 +29,6 @@ def mark_one_read(
     if not ok:
         raise HTTPException(status_code=404, detail="Notification not found")
     return {"ok": True}
-
 
 @router.post("/mark-read")
 def mark_read(
