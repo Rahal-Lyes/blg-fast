@@ -25,6 +25,21 @@ def push_notif(
     return notif
 
 
+def mark_one_read(db: Session, notification_id: int, user_id: int) -> bool:
+    notif = (
+        db.query(Notification)
+        .filter(
+            Notification.id == notification_id,
+            Notification.target_user_id == user_id,
+        )
+        .first()
+    )
+    if not notif:
+        return False
+    notif.is_read = True
+    db.commit()
+    return True
+
 def get_user_notifications(db: Session, user_id: int, limit: int = 50):
     return (
         db.query(Notification)

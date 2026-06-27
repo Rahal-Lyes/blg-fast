@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -17,6 +17,18 @@ def get_my_notifications(
     db: Session = Depends(get_db),
 ):
     return notification_service.get_user_notifications(db, current_user.id)
+
+
+@router.post("/{notification_id}/mark-read")          # ← AVANT /mark-read
+def mark_one_read(
+    notification_id: int,
+    current_user: User = Depends(require_auth),
+    db: Session = Depends(get_db),
+):
+    ok = notification_service.mark_one_read(db, notification_id, current_user.id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return {"ok": True}
 
 
 @router.post("/mark-read")
