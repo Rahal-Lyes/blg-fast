@@ -90,3 +90,20 @@ def unread_count_admin(db: Session) -> int:
         .filter(Notification.target_admin == True, Notification.is_read == False)
         .count()
     )
+
+
+    
+def mark_one_read_admin(db: Session, notification_id: int) -> bool:
+    notif = (
+        db.query(Notification)
+        .filter(
+            Notification.id == notification_id,
+            Notification.target_admin == True,
+        )
+        .first()
+    )
+    if not notif:
+        return False
+    notif.is_read = True
+    db.commit()
+    return True
