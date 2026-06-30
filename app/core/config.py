@@ -28,7 +28,9 @@ class Settings(BaseSettings):
         "http://localhost:5173",
         "http://localhost:8080",
         "http://localhost:19006",  # Expo important
-        "https://blg-fast.onrender.com"
+        "https://blg-fast.onrender.com",
+        "https://balighplus.onrender.com",
+
     ]
 
     # ── IMPORTANT DOCKER FIX ─────────────────
